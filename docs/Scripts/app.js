@@ -8,8 +8,6 @@
         console.log("Homepage loaded")
 
         let AboutUsButton = document.getElementById("AboutUsButton");
-        // console.log(AboutUsButton);
-
         // Attach event listener
         AboutUsButton.addEventListener("click", function()
         {
@@ -20,7 +18,6 @@
         });
 
         // Step 1: Get an entry point (insertion/deletion point) reference
-        
         // let Body = document.body; // Body is a special keyword
         let DocumentBody = document.body;
         let MainContent = document.getElementsByTagName("main")[0];
@@ -60,6 +57,10 @@
         // Deletion - .remove();
         // Article.remove();
 
+        // Test new contact class
+        // let darryl = new Contact("Darryl Olson", "555-555-5555", "darryloslson@hotmail.com");
+        // console.log(darryl.toString());
+
     }
 
     function DisplayProductsPage()
@@ -80,6 +81,88 @@
     function DisplayContactPage()
     {
         console.log("Contact Page Loaded");
+
+        // When send button is clicked
+        // When subscribe check box is checked
+        let sendButton = document.getElementById("sendButton");
+        let subscribeCheckbox = document.getElementById("subscribeCheckbox");
+
+        // Item test - local storage view in inspect>storage in browser
+        // Stays forever in storage persists
+        // localStorage.setItem("test", "Test data");
+        // console.log(localStorage.getItem("test"));
+
+        // Serializing - Encoding, Hashing etc.
+        // De-Serializing - Decoding
+
+        // When user adds new contact
+        sendButton.addEventListener("click", function(event)
+        {
+            // event.preventDefault(); // For testing - This method is deprecated
+
+            // Just check if box is checked, instead of event listening
+            // Only if subscribe checkbox is checked
+            if(subscribeCheckbox.checked)
+            {
+                console.log("Subscriber Checked");
+                let contact = new Contact(fullName.value, contactNumber.value, emailAddress.value);
+                // console.log(contact.serialize());
+                if(contact.serialize())
+                {
+                    // Unique key for each contact, using first chara of their name and current date
+                    let key = contact.FullName.substring(0, 1) + Date.now();
+
+                    // Store in local storage
+                    localStorage.setItem(key, contact.serialize());
+                }
+            }
+        });
+    }
+
+    // Show the contacts list on the ContactList page
+    function DisplayContactListPage()
+    {
+        if(localStorage.length > 0)
+        {
+            let contactList = document.getElementById("contactList");
+
+            let data = "";
+
+            // Get the keys from local storage - gives list of keys (which hold user info) [o:]
+            let keys = Object.keys(localStorage);
+
+            let index = 1;
+
+            
+            // for evert key in the keys string array
+            for(const key of keys)
+            {
+                let contactData = localStorage.getItem(key); // get localStorage data value
+
+                // Instantiate contact obj - empty contact
+                let contact = new Contact();
+                
+                // contactData retrieved from local storage
+                contact.deserialize(contactData);
+
+                console.log(contact.toString);
+
+                // Formatting how data will look on page, notice table structure
+                data += `<tr>
+                <th scope="row" class="text-center"> ${index}</th>
+                <td>${contact.FullName}</td>
+                <td>${contact.ContactNumber}</td>
+                <td>${contact.EmailAddress}</td>
+                <td></td>
+                <td></td>
+                </tr>`;
+
+                index++;
+            }
+            // To add: CREATE/DELETE FUNCT
+            contactList.innerHTML = data;
+        }
+        
     }
 
     // Named function
@@ -104,6 +187,9 @@
                 break;
             case "Contact Us":
                 DisplayContactPage();
+                break;
+            case "Contact-List":
+                DisplayContactListPage();
                 break;
         }  
     }
