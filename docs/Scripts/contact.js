@@ -1,4 +1,6 @@
-class Contact
+(function (core) {
+
+    class Contact
 {
     // Public properties first (Getters + setters)
     get FullName()
@@ -77,3 +79,7 @@ class Contact
     }
     
 }
+    core.Contact = Contact;
+})(core || (core = {}));
+
+
