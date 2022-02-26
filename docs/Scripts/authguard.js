@@ -1,9 +1,21 @@
 "use strict";
-((function(){
-    // Check if user is logged in
-    if(!sessionStorage.getItem("user"))
+((function()
+{
+    // List of protected routes
+    let protected_routes = [
+        "contact-list"
+    ];
+
+    // console.log(protected_routes.indexOf(router.ActiveLink) === -1);
+    
+    if(protected_routes.indexOf(router.ActiveLink) > -1)
     {
-        // If not...redirect them back to login page
-        location.href = "login.html";
+        // Check if user is logged in
+        if(!sessionStorage.getItem("user"))
+        {
+            // If not...redirect them back to login page
+            location.href = "/login";
+        }
     }
+
 }))();
